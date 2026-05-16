@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Conversor de Imagem</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+
+    .container {
+
+      max-width: 900px;
+
+      margin: 50px auto;
+
+      padding: 20px;
+
+      text-align: center;
+    }
+
+    .preview {
+
+      margin-top: 30px;
+    }
+
+    img {
+
+      max-width: 400px;
+
+      border-radius: 15px;
+
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    select,
+    button {
+
+      margin-top: 20px;
+
+      padding: 15px 25px;
+
+      border: none;
+
+      border-radius: 12px;
+
+      font-size: 16px;
+    }
+
+    button {
+
+      background: black;
+
+      color: white;
+
+      cursor: pointer;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<section class="hero">
+
+  <h1>Conversor de Imagem</h1>
+
+  <p>
+    Converter PNG, JPG e WEBP
+  </p>
+
+</section>
+
+<div class="container">
+
+  <label class="upload-area">
+
+    <input
+      type="file"
+      id="imagemInput"
+      accept="image/*"
+    >
+
+    Selecionar Imagem
+
+  </label>
+
+  <br>
+
+  <select id="formato">
+
+    <option value="image/png">
+      PNG
+    </option>
+
+    <option value="image/jpeg">
+      JPG
+    </option>
+
+    <option value="image/webp">
+      WEBP
+    </option>
+
+  </select>
+
+  <br>
+
+  <button onclick="converterImagem()">
+
+    Converter Imagem
+
+  </button>
+
+  <div class="preview">
+
+    <img
+      id="preview"
+      style="display:none;"
+    >
+
+  </div>
+
+</div>
+
+<script>
+
+let imagemOriginal;
+
+document
+  .getElementById('imagemInput')
+  .addEventListener(
+    'change',
+    function(event) {
+
+      const arquivo =
+        event.target.files[0];
+
+      if (!arquivo) return;
+
+      const leitor =
+        new FileReader();
+
+      leitor.onload = function(e) {
+
+        imagemOriginal = new Image();
+
+        imagemOriginal.src =
+          e.target.result;
+
+        document
+          .getElementById('preview')
+          .src =
+          e.target.result;
+
+        document
+          .getElementById('preview')
+          .style.display =
+          'block';
+      };
+
+      leitor.readAsDataURL(arquivo);
+    }
+  );
+
+function converterImagem() {
+
+  const formato =
+    document.getElementById('formato').value;
+
+  const canvas =
+    document.createElement('canvas');
+
+  const ctx =
+    canvas.getContext('2d');
+
+  canvas.width =
+    imagemOriginal.width;
+
+  canvas.height =
+    imagemOriginal.height;
+
+  ctx.drawImage(
+    imagemOriginal,
+    0,
+    0
+  );
+
+  canvas.toBlob(
+
+    function(blob) {
+
+      const link =
+        document.createElement('a');
+
+      link.href =
+        URL.createObjectURL(blob);
+
+      let extensao = 'png';
+
+      if (formato === 'image/jpeg') {
+        extensao = 'jpg';
+      }
+
+      if (formato === 'image/webp') {
+        extensao = 'webp';
+      }
+
+      link.download =
+        'imagem-convertida.' + extensao;
+
+      link.click();
+    },
+
+    formato
+  );
+}
+
+</script>
+
+</body>
+</html>

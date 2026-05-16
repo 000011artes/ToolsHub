@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>ToolsHub</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+</head>
+
+<body>
+
+<header>
+  <div class="logo">ToolsHub</div>
+
+  <nav>
+    <a href="#">Início</a>
+    <a href="#ferramentas">Ferramentas</a>
+    <a href="#sobre">Sobre</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Plataforma de Ferramentas Online</h1>
+
+  <p>
+    Converta arquivos, edite PDFs, imagens, vídeos e muito mais.
+  </p>
+
+  <button onclick="scrollToTools()">
+    Começar
+  </button>
+</section>
+
+<section class="tools" id="ferramentas">
+
+  <div class="card">
+    <h2>📄 Word → PDF</h2>
+    <p>Converter documentos Word em PDF</p>
+    <button onclick="window.location.href='word-pdf.html'">
+      Abrir
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>📄 PDF → Word</h2>
+    <p>Converter PDF em Word</p>
+    <button onclick="window.location.href='pdf-word.html'">
+      Abrir
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>🖼️ Conversor de Imagem</h2>
+    <p>Converter PNG, JPG e WEBP</p>
+    <button onclick="window.location.href='imagem.html'">
+      Abrir
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>🎯 Removedor de Fundo</h2>
+    <p>Remova fundo de imagens automaticamente</p>
+    <button onclick="window.location.href='removedor.html'">
+      Abrir
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>📝 Editor Online</h2>
+    <p>Editor de textos online</p>
+    <button onclick="window.location.href='editor.html'">
+      Abrir
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>🎬 Compressor de Vídeo</h2>
+    <p>Compacte vídeos sem perder qualidade</p>
+    <button onclick="window.location.href='video.html'">
+      Abrir
+    </button>
+  </div>
+
+</section>
+
+<section class="about" id="sobre">
+  <h2>Sobre o Projeto</h2>
+
+  <p>
+    Plataforma de ferramentas online feita em HTML, CSS.
+  </p>
+</section>
+
+<footer>
+  <p>© 2026 ToolsHub</p>
+</footer>
+
+<script>
+function scrollToTools() {
+  document.getElementById('ferramentas')
+    .scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>

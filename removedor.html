@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Removedor de Fundo</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+
+    .container {
+      max-width: 900px;
+      margin: 50px auto;
+      text-align: center;
+    }
+
+    .box {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    input {
+      margin: 20px 0;
+    }
+
+    button {
+      padding: 15px 25px;
+      border: none;
+      background: black;
+      color: white;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background: #222;
+    }
+
+    img {
+      max-width: 300px;
+      margin-top: 20px;
+      border-radius: 12px;
+    }
+
+    #status {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    a {
+      display: block;
+      margin-top: 15px;
+      color: black;
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<section class="hero">
+  <h1>🎯 Removedor de Fundo</h1>
+  <p>Remova fundo de imagens automaticamente</p>
+</section>
+
+<div class="container">
+
+  <div class="box">
+
+    <input type="file" id="imgInput" accept="image/*">
+
+    <br>
+
+    <button onclick="removerFundo()">
+      Remover Fundo
+    </button>
+
+    <p id="status"></p>
+
+    <img id="preview">
+
+    <a id="download" style="display:none;">Baixar imagem</a>
+
+  </div>
+
+</div>
+
+<!-- IA no navegador -->
+<script type="module">
+
+import { removeBackground } from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.5/+esm";
+
+window.removerFundo = async function () {
+
+  const file =
+    document.getElementById('imgInput').files[0];
+
+  const status =
+    document.getElementById('status');
+
+  const preview =
+    document.getElementById('preview');
+
+  const download =
+    document.getElementById('download');
+
+  if (!file) {
+    status.innerText = "Selecione uma imagem";
+    return;
+  }
+
+  status.innerText = "Processando... (pode demorar na 1ª vez)";
+
+  preview.src = "";
+  download.style.display = "none";
+
+  try {
+
+    const blob =
+      await removeBackground(file);
+
+    const url =
+      URL.createObjectURL(blob);
+
+    preview.src = url;
+
+    download.href = url;
+    download.download = "sem-fundo.png";
+    download.innerText = "Baixar imagem";
+    download.style.display = "block";
+
+    status.innerText = "Pronto!";
+
+  } catch (e) {
+
+    console.error(e);
+
+    status.innerText =
+      "Erro ao processar (tente usar Live Server)";
+  }
+}
+
+</script>
+</body>
+</html>

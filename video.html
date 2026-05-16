@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compressor de Vídeo</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+
+    .container {
+      max-width: 900px;
+      margin: 50px auto;
+      text-align: center;
+    }
+
+    .box {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    input, button {
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 15px 25px;
+      border: none;
+      background: black;
+      color: white;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    video {
+      margin-top: 20px;
+      width: 100%;
+      border-radius: 12px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<section class="hero">
+  <h1>🎬 Compressor de Vídeo</h1>
+  <p>Compacte vídeos diretamente no navegador</p>
+</section>
+
+<div class="container">
+
+  <div class="box">
+
+    <input type="file" id="videoInput" accept="video/*">
+
+    <br>
+
+    <button onclick="comprimirVideo()">
+      Comprimir Vídeo
+    </button>
+
+    <p id="status"></p>
+
+    <video id="preview" controls></video>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/ffmpeg.min.js"></script>
+
+<script>
+
+const { createFFmpeg, fetchFile } = FFmpeg;
+
+const ffmpeg = createFFmpeg({
+  log: true
+});
+
+async function comprimirVideo() {
+
+  const input =
+    document.getElementById('videoInput').files[0];
+
+  const status =
+    document.getElementById('status');
+
+  const preview =
+    document.getElementById('preview');
+
+  if (!input) {
+    status.innerText = "Selecione um vídeo";
+    return;
+  }
+
+  status.innerText = "Carregando compressor...";
+
+  if (!ffmpeg.isLoaded()) {
+    await ffmpeg.load();
+  }
+
+  status.innerText = "Comprimindo vídeo...";
+
+  ffmpeg.FS('writeFile', 'input.mp4', await fetchFile(input));
+
+  await ffmpeg.run(
+    '-i',
+    'input.mp4',
+    '-vcodec',
+    'libx264',
+    '-crf',
+    '28',
+    'output.mp4'
+  );
+
+  const data =
+    ffmpeg.FS('readFile', 'output.mp4');
+
+  const videoBlob =
+    new Blob([data.buffer], { type: 'video/mp4' });
+
+  const url =
+    URL.createObjectURL(videoBlob);
+
+  preview.src = url;
+
+  const link =
+    document.createElement('a');
+
+  link.href = url;
+
+  link.download = "video-comprimido.mp4";
+
+  link.click();
+
+  status.innerText = "Vídeo comprimido com sucesso!";
+}
+
+</script>
+
+</body>
+</html>
